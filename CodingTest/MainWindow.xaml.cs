@@ -34,9 +34,10 @@ namespace CodingTest
 
 		char[] validInput = { 'A', 'B', 'L', 'R' };
 
+	
 		public MainWindow()
 		{
-
+			
 			InitializeComponent();
 			dynamicGridViewModel = new DynamicGridViewModel
 			{
@@ -61,6 +62,7 @@ namespace CodingTest
 		void GetInput(ref string sequence)
 		{
 			sequence = new TextRange(txtInput.Document.ContentStart, txtInput.Document.ContentEnd).Text.ToUpper();
+			sequence = sequence.Replace("\r\n", String.Empty);
 		}
 
 		void GetReferenceCoordinates(out int x_ref, out int y_ref, out int x, out int y)
@@ -147,44 +149,53 @@ namespace CodingTest
 		
 		private void btnUpdate_Click(object sender, RoutedEventArgs e)
 		{
+			
 			var sequence = "" ;
 			GetInput(ref sequence);
-			GetReferenceCoordinates(out var x_ref, out var y_ref, out var x, out var y);
-
-			GetCoordinates(ref x,ref y, ref sequence);
-
-			int totalRow = 0, totalCol = 0;
-
-			GetRowColCount(ref totalRow, ref totalCol);
-
-			bool isXinBounds = isValidX(x, totalRow);
-			bool isYinBounds = isValidY(y, totalRow);
-
-			string outputStr = GetOutput(x,y,x_ref,y_ref,isXinBounds,isYinBounds);
-
-
-
-
-			int cols = CheckCount(int.Parse(txtColCount.Text), 12);
-			int row = CheckCount(int.Parse(txtColCount.Text), 12);
-
-			if (isXinBounds && isYinBounds)
+			if (!string.IsNullOrEmpty(sequence))
 			{
-				dynamicGridViewModel = new DynamicGridViewModel()
-				{
-					GridWidth = cols,
-					GridHeight = row,
-					BorderColor = Colors.Blue,
-					StartColor = Colors.Azure,
-					FinishColor = Colors.CornflowerBlue,
-					posX = x,
-					posY = y,
-				};
-				dynamicGridViewModel.SelectCell(x, y, Colors.Gray);
-				DataContext = dynamicGridViewModel;
-			}
+				GetReferenceCoordinates(out var x_ref, out var y_ref, out var x, out var y);
 
-			RefreshText(ref outputStr);
+				GetCoordinates(ref x, ref y, ref sequence);
+
+				int totalRow = 0, totalCol = 0;
+
+				GetRowColCount(ref totalRow, ref totalCol);
+
+				bool isXinBounds = isValidX(x, totalRow);
+				bool isYinBounds = isValidY(y, totalRow);
+
+				string outputStr = GetOutput(x, y, x_ref, y_ref, isXinBounds, isYinBounds, totalCol, totalRow);
+
+
+
+
+				int cols = CheckCount(int.Parse(txtColCount.Text), 12);
+				int row = CheckCount(int.Parse(txtColCount.Text), 12);
+
+				if (isXinBounds && isYinBounds)
+				{
+					dynamicGridViewModel = new DynamicGridViewModel()
+					{
+						GridWidth = cols,
+						GridHeight = row,
+						BorderColor = Colors.Blue,
+						StartColor = Colors.Azure,
+						FinishColor = Colors.CornflowerBlue,
+						posX = x,
+						posY = y,
+					};
+					dynamicGridViewModel.SelectCell(x, y, Colors.Gray);
+					DataContext = dynamicGridViewModel;
+				}
+
+				RefreshText(ref outputStr);
+			}
+			else
+			{
+				sequence = "";
+				MessageBox.Show("Input cant be empty");
+			}
 		}
 	}
 }
