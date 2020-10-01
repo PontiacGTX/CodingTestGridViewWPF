@@ -131,9 +131,9 @@ namespace CodingTest
 			if (y > y_ref)
 				outputStr += $"South ";
 			if (x < x_ref)
-				outputStr += $"East ";
-			if (x > x_ref)
 				outputStr += $"West ";
+			if (x > x_ref)
+				outputStr += $"East ";
 
 
 			return outputStr += $" {pos}";
