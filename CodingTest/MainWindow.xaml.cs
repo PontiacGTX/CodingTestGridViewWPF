@@ -138,13 +138,15 @@ namespace CodingTest
 
 			return outputStr += $" {pos}";
 		}
-		private void btnUpdate_Click(object sender, RoutedEventArgs e)
+
+
+		void Update()
 		{
-			var sequence = "" ;
+			var sequence = "";
 			GetInput(ref sequence);
 			GetReferenceCoordinates(out var x_ref, out var y_ref, out var x, out var y);
 
-			GetCoordinates(ref x,ref y, ref sequence);
+			GetCoordinates(ref x, ref y, ref sequence);
 
 			int totalRow = 0, totalCol = 0;
 
@@ -178,6 +180,10 @@ namespace CodingTest
 			}
 
 			RefreshText(ref outputStr);
+		}
+		private void btnUpdate_Click(object sender, RoutedEventArgs e)
+		{
+			Update();
 		}
 	}
 }
