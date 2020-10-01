@@ -110,21 +110,9 @@ namespace CodingTest
 			txtOutput.Document.Blocks.Clear();
 			txtOutput.Document.Blocks.Add(new Paragraph(new Run(outputStr)));
 		}
-		private void btnUpdate_Click(object sender, RoutedEventArgs e)
+
+		string GetOutput(int x, int y, int x_ref, int y_ref, bool isXinBounds, bool isYinBounds)
 		{
-			var sequence = "" ;
-			GetInput(ref sequence);
-			GetReferenceCoordinates(out var x_ref, out var y_ref, out var x, out var y);
-
-			GetCoordinates(ref x,ref y, ref sequence);
-
-			int totalRow = 0, totalCol = 0;
-
-			GetRowColCount(ref totalRow, ref totalCol);
-
-			bool isXinBounds = isValidX(x, totalRow);
-			bool isYinBounds = isValidY(y, totalRow);
-
 			string outputStr = "";
 
 			if (isXinBounds && isYinBounds)
@@ -147,8 +135,28 @@ namespace CodingTest
 			if (x > x_ref)
 				outputStr += $"West ";
 
-			
-			outputStr += $" {pos}";
+
+			return outputStr += $" {pos}";
+		}
+		private void btnUpdate_Click(object sender, RoutedEventArgs e)
+		{
+			var sequence = "" ;
+			GetInput(ref sequence);
+			GetReferenceCoordinates(out var x_ref, out var y_ref, out var x, out var y);
+
+			GetCoordinates(ref x,ref y, ref sequence);
+
+			int totalRow = 0, totalCol = 0;
+
+			GetRowColCount(ref totalRow, ref totalCol);
+
+			bool isXinBounds = isValidX(x, totalRow);
+			bool isYinBounds = isValidY(y, totalRow);
+
+			string outputStr = GetOutput(x, y, x_ref, y_ref, isXinBounds, isYinBounds);
+
+
+
 
 			int cols = CheckCount(int.Parse(txtColCount.Text), 12);
 			int row = CheckCount(int.Parse(txtColCount.Text), 12);
