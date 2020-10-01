@@ -42,7 +42,8 @@
                 x:Name="txtColCount"
                 Grid.Row="1"
                 Text="{Binding Path=GridWidth}"
-                Margin="2"/>
+                Margin="2"
+                IsEnabled="False"/>
 
             <TextBlock
                 Grid.Row="2"
@@ -51,7 +52,7 @@
 
             <TextBox
                 x:Name="txtRowCount"
-                
+                IsEnabled="False"
                 Grid.Row="3"
                 Text="{Binding Path=GridHeight}"
                 Margin="2"/>
