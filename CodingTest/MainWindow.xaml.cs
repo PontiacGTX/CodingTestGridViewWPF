@@ -111,7 +111,7 @@ namespace CodingTest
 			txtOutput.Document.Blocks.Add(new Paragraph(new Run(outputStr)));
 		}
 
-		string GetOutput(int x, int y, int x_ref, int y_ref, bool isXinBounds, bool isYinBounds)
+		string GetOutput(int x, int y, int x_ref, int y_ref, bool isXinBounds, bool isYinBounds, int maxWidth, int maxHeight)
 		{
 			string outputStr = "";
 
@@ -124,7 +124,13 @@ namespace CodingTest
 				outputStr = $"False ";
 			}
 
-			string pos = $"({x},{y})";
+			_x = 0;
+			_y = 0;
+
+			int origin_x = 0, origin_y = maxHeight;
+
+			_x = origin_x + x;
+			_y = origin_y - y;
 
 			if (y < y_ref)
 				outputStr += $"North ";
@@ -135,9 +141,10 @@ namespace CodingTest
 			if (x > x_ref)
 				outputStr += $"East ";
 
-
+			string pos = $"({_x},{_y})";
 			return outputStr += $" {pos}";
 		}
+		
 		private void btnUpdate_Click(object sender, RoutedEventArgs e)
 		{
 			var sequence = "" ;
