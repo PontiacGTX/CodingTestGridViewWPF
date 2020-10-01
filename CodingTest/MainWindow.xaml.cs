@@ -1,7 +1,8 @@
-﻿using CodingTest.ViewModels;
+using CodingTest.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -56,17 +57,22 @@ namespace CodingTest
 
 		}
 
-		private void btnUpdate_Click(object sender, RoutedEventArgs e)
+
+		void GetInput(ref string sequence)
 		{
-			var sequence = new TextRange(txtInput.Document.ContentStart, txtInput.Document.ContentEnd).Text.ToUpper();
+			sequence = new TextRange(txtInput.Document.ContentStart, txtInput.Document.ContentEnd).Text.ToUpper();
+		}
 
-			var x_ref = dynamicGridViewModel.posX;
-			var y_ref = dynamicGridViewModel.posY;
+		void GetReferenceCoordinates(out int x_ref, out int y_ref, out int x, out int y)
+		{
+			 x_ref = y_ref = y= x = 0;
+			
+			x_ref = x = dynamicGridViewModel.posX;
+			y_ref = y = dynamicGridViewModel.posY;
+		}
 
-			var x = dynamicGridViewModel.posX;
-			var y = dynamicGridViewModel.posY;
-
-
+		void GetCoordinates(ref int x, ref int y, ref string sequence)
+		{
 			foreach (char c in sequence)
 			{
 				if (validInput.Any(ch => ch == c))
@@ -89,9 +95,32 @@ namespace CodingTest
 					}
 				}
 			}
+		}
 
-			var totalRow = dynamicGridViewModel.GridHeight;
-			var totalCol = dynamicGridViewModel.GridWidth;
+		void GetRowColCount(ref int row, ref int col)
+		{
+			row = dynamicGridViewModel.GridHeight; 
+			col = dynamicGridViewModel.GridWidth;
+		}
+
+		void RefreshText(ref string outputStr)
+		{
+			txtInput.Document.Blocks.Clear();
+
+			txtOutput.Document.Blocks.Clear();
+			txtOutput.Document.Blocks.Add(new Paragraph(new Run(outputStr)));
+		}
+		private void btnUpdate_Click(object sender, RoutedEventArgs e)
+		{
+			var sequence = "" ;
+			GetInput(ref sequence);
+			GetReferenceCoordinates(out var x_ref, out var y_ref, out var x, out var y);
+
+			GetCoordinates(ref x,ref y, ref sequence);
+
+			int totalRow = 0, totalCol = 0;
+
+			GetRowColCount(ref totalRow, ref totalCol);
 
 			bool isXinBounds = isValidX(x, totalRow);
 			bool isYinBounds = isValidY(y, totalRow);
@@ -110,19 +139,15 @@ namespace CodingTest
 			string pos = $"({x},{y})";
 
 			if (y < y_ref)
-				outputStr += $"North ({x},{y})";
+				outputStr += $"North ";
 			if (y > y_ref)
-				outputStr += $"South ({x},{y})";
+				outputStr += $"South ";
 			if (x < x_ref)
-				outputStr += $"East ({x},{y})";
+				outputStr += $"East ";
 			if (x > x_ref)
-				outputStr += $"West ({x},{y})";
+				outputStr += $"West ";
 
-			while (outputStr.Contains(pos))
-			{
-				outputStr = outputStr.Replace(pos, String.Empty).ToString();
-			}
-
+			
 			outputStr += $" {pos}";
 
 			int cols = CheckCount(int.Parse(txtColCount.Text), 12);
@@ -144,10 +169,7 @@ namespace CodingTest
 				DataContext = dynamicGridViewModel;
 			}
 
-			txtInput.Document.Blocks.Clear();
-
-			txtOutput.Document.Blocks.Clear();
-			txtOutput.Document.Blocks.Add(new Paragraph(new Run(outputStr)));
+			RefreshText(ref outputStr);
 		}
 	}
 }
