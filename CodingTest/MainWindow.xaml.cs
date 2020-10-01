@@ -138,15 +138,13 @@ namespace CodingTest
 
 			return outputStr += $" {pos}";
 		}
-
-
-		void Update()
+		private void btnUpdate_Click(object sender, RoutedEventArgs e)
 		{
-			var sequence = "";
+			var sequence = "" ;
 			GetInput(ref sequence);
 			GetReferenceCoordinates(out var x_ref, out var y_ref, out var x, out var y);
 
-			GetCoordinates(ref x, ref y, ref sequence);
+			GetCoordinates(ref x,ref y, ref sequence);
 
 			int totalRow = 0, totalCol = 0;
 
@@ -155,7 +153,7 @@ namespace CodingTest
 			bool isXinBounds = isValidX(x, totalRow);
 			bool isYinBounds = isValidY(y, totalRow);
 
-			string outputStr = GetOutput(x, y, x_ref, y_ref, isXinBounds, isYinBounds);
+			string outputStr = GetOutput(x,y,x_ref,y_ref,isXinBounds,isYinBounds);
 
 
 
@@ -180,10 +178,6 @@ namespace CodingTest
 			}
 
 			RefreshText(ref outputStr);
-		}
-		private void btnUpdate_Click(object sender, RoutedEventArgs e)
-		{
-			Update();
 		}
 	}
 }
