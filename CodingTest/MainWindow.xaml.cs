@@ -162,7 +162,7 @@ namespace CodingTest
 
 				GetRowColCount(ref totalRow, ref totalCol);
 
-				bool isXinBounds = isValidX(x, totalRow);
+				bool isXinBounds = isValidX(x, totalCol);
 				bool isYinBounds = isValidY(y, totalRow);
 
 				string outputStr = GetOutput(x, y, x_ref, y_ref, isXinBounds, isYinBounds, totalCol, totalRow);
